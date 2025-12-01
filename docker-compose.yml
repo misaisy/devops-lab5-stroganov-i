@@ -1,0 +1,32 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: myjenkins
+    volumes:
+      - jenkins_volume:/var/jenkins_home
+      - nginx_volume:/mnt/nginx
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx
+    container_name: mynginx
+    volumes:
+      - nginx_volume:/usr/share/nginx/html
+    ports:
+      - "8001:80"
+    networks:
+      - app-network
+
+volumes:
+  jenkins_volume:
+    external: true
+  nginx_volume:
+    external: true
+
+networks:
+  app-network:
+    driver: bridge
